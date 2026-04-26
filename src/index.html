@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAppLab | AI Agent Experiments</title>
+    <style>
+        :root {
+            --primary: #00ff88;
+            --bg: #0f172a;
+            --text: #f8fafc;
+            --card-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .highlight {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .tag {
+            font-size: 0.8rem;
+            background: #334155;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>WebApp<span class="highlight">Lab</span></h1>
+        <p>Exploring the frontier of development through AI Agents.</p>
+    </header>
+
+    <div class="container">
+        <section id="about">
+            <h2>Experimental Essays</h2>
+            <p>Welcome to the laboratory. This space is dedicated to documenting the evolution of software development when orchestrated by autonomous agents. Each project below represents a specific thesis in AI-driven architecture.</p>
+        </section>
+
+        <div class="grid">
+            <div class="card">
+                <span class="tag">Experiment #01</span>
+                <h3>Auto-Refactor Agent</h3>
+                <p>Testing the capabilities of LLMs in identifying and fixing technical debt autonomously within legacy React codebases.</p>
+            </div>
+
+            <div class="card">
+                <span class="tag">Experiment #02</span>
+                <h3>Multi-Agent Orchestration</h3>
+                <p>A study on how specialized agents (Backend, Frontend, QA) communicate to build a full-stack feature from a single prompt.</p>
+            </div>
+
+            <div class="card">
+                <span class="tag">Experiment #03</span>
+                <h3>Semantic Documentation</h3>
+                <p>Generating real-time, context-aware documentation that evolves alongside the source code using RAG pipelines.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 WebAppLab - Built for the future of Code.</p>
+    </footer>
+
+</body>
+</html>
