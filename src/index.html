@@ -3,126 +3,484 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAppLab | AI Agent Experiments</title>
+    <title>Telegram Codex Lab | Personal AI Shipping Experiments</title>
     <style>
         :root {
-            --primary: #00ff88;
-            --bg: #120f2b;
-            --text: #f8fafc;
-            --card-bg: #1e293b;
+            --ink: #f8f2e8;
+            --sand: #dbc9a6;
+            --sun: #ff9f1c;
+            --coral: #ff4d6d;
+            --ocean: #1c3d5a;
+            --night: #08111f;
+            --panel: rgba(8, 17, 31, 0.72);
+            --line: rgba(248, 242, 232, 0.14);
+            --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: "Avenir Next", "Trebuchet MS", sans-serif;
             background:
-                radial-gradient(circle at top left, #ff7a18 0%, rgba(255, 122, 24, 0) 32%),
-                radial-gradient(circle at top right, #2ec4b6 0%, rgba(46, 196, 182, 0) 28%),
-                linear-gradient(180deg, #20143f 0%, #120f2b 55%, #070b16 100%);
-            color: var(--text);
+                radial-gradient(circle at 15% 20%, rgba(255, 159, 28, 0.40) 0%, rgba(255, 159, 28, 0) 24%),
+                radial-gradient(circle at 85% 12%, rgba(255, 77, 109, 0.30) 0%, rgba(255, 77, 109, 0) 22%),
+                linear-gradient(135deg, #14324a 0%, #0a1627 38%, #08111f 100%);
+            color: var(--ink);
             margin: 0;
-            line-height: 1.6;
+            min-height: 100vh;
+            line-height: 1.5;
         }
 
-        header {
-            padding: 4rem 2rem;
-            text-align: center;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(248, 242, 232, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(248, 242, 232, 0.04) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.60), transparent 90%);
+            pointer-events: none;
+        }
+
+        main {
+            width: min(1180px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 1.25rem 0 4rem;
+        }
+
+        .shell {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(8, 17, 31, 0.54), rgba(8, 17, 31, 0.80));
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+
+        .shell::after {
+            content: "";
+            position: absolute;
+            right: -120px;
+            bottom: -120px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 159, 28, 0.18) 0%, rgba(255, 159, 28, 0) 70%);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--sun), var(--coral));
+            color: var(--night);
+            font-weight: 800;
+        }
+
+        .status {
+            padding: 0.45rem 0.9rem;
+            border: 1px solid rgba(255, 159, 28, 0.35);
+            border-radius: 999px;
+            color: var(--sand);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+            gap: 2rem;
+            padding: 3.5rem 2rem 2rem;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--sand);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 3rem;
+            height: 1px;
+            background: linear-gradient(90deg, var(--sun), transparent);
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            margin: 0;
+            font-weight: 700;
         }
 
         h1 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
+            margin-top: 1rem;
+            font-size: clamp(3rem, 7vw, 6.1rem);
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+            max-width: 10ch;
         }
 
-        .highlight {
-            color: var(--primary);
+        .accent {
+            color: var(--sun);
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
+        .hero p {
+            max-width: 56ch;
+            margin: 1.5rem 0 0;
+            color: rgba(248, 242, 232, 0.80);
+            font-size: 1.05rem;
         }
 
-        .grid {
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.95rem 1.35rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+
+        .button.primary {
+            background: linear-gradient(135deg, var(--sun), var(--coral));
+            color: var(--night);
+        }
+
+        .button.secondary {
+            border: 1px solid var(--line);
+            color: var(--ink);
+            background: rgba(248, 242, 232, 0.04);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .terminal {
+            position: relative;
+            padding: 1.2rem;
+            border-radius: 24px;
+            border: 1px solid rgba(248, 242, 232, 0.10);
+            background: linear-gradient(180deg, rgba(248, 242, 232, 0.06), rgba(248, 242, 232, 0.03));
+        }
+
+        .terminal-head {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 1rem;
+        }
+
+        .dot {
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 50%;
+        }
+
+        .dot.sun {
+            background: var(--sun);
+        }
+
+        .dot.coral {
+            background: var(--coral);
+        }
+
+        .dot.sand {
+            background: var(--sand);
+        }
+
+        .terminal-body {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            gap: 0.75rem;
+            font-size: 0.96rem;
+            color: rgba(248, 242, 232, 0.88);
         }
 
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+        .bubble {
+            padding: 0.95rem 1rem;
+            border-radius: 18px;
+            max-width: 90%;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
+        .bubble.user {
+            justify-self: end;
+            background: rgba(255, 159, 28, 0.16);
         }
 
-        .card h3 {
-            margin-top: 0;
-            color: var(--primary);
+        .bubble.agent {
+            background: rgba(28, 61, 90, 0.86);
         }
 
-        .tag {
+        .metrics,
+        .story,
+        .tracks {
+            padding: 0 2rem 2rem;
+        }
+
+        .metrics-grid,
+        .story-grid,
+        .tracks-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .metrics-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .panel {
+            padding: 1.35rem;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: var(--panel);
+        }
+
+        .metric-value {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--sun);
+        }
+
+        .metric-label,
+        .panel p,
+        .track-list li,
+        footer p {
+            color: rgba(248, 242, 232, 0.76);
+        }
+
+        .story-grid {
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: start;
+        }
+
+        .story-copy p {
+            margin: 1rem 0 0;
+            max-width: 58ch;
+        }
+
+        .signal {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.45rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(255, 77, 109, 0.14);
+            color: var(--sand);
             font-size: 0.8rem;
-            background: #334155;
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
             text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .tracks-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .track-list {
+            margin: 1rem 0 0;
+            padding-left: 1.1rem;
+        }
+
+        .track-list li + li {
+            margin-top: 0.65rem;
         }
 
         footer {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 1rem 2rem 2.5rem;
             font-size: 0.9rem;
-            opacity: 0.6;
+        }
+
+        @media (max-width: 900px) {
+            .hero,
+            .story-grid,
+            .tracks-grid,
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                max-width: 12ch;
+            }
+        }
+
+        @media (max-width: 640px) {
+            main {
+                width: min(100% - 1rem, 1180px);
+                padding-bottom: 2rem;
+            }
+
+            .topbar,
+            .hero,
+            .metrics,
+            .story,
+            .tracks,
+            footer {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>WebApp<span class="highlight">Lab</span></h1>
-        <p>Exploring the frontier of development through AI Agents.</p>
-    </header>
-
-    <div class="container">
-        <section id="about">
-            <h2>Experimental Essays</h2>
-            <p>Welcome to the laboratory. This space is dedicated to documenting the evolution of software development when orchestrated by autonomous agents. Each project below represents a specific thesis in AI-driven architecture.</p>
-        </section>
-
-        <div class="grid">
-            <div class="card">
-                <span class="tag">Experiment #01</span>
-                <h3>Auto-Refactor Agent</h3>
-                <p>Testing the capabilities of LLMs in identifying and fixing technical debt autonomously within legacy React codebases.</p>
+    <main>
+        <div class="shell">
+            <div class="topbar">
+                <div class="brand">
+                    <span class="brand-mark">C</span>
+                    <span>Telegram Codex Lab</span>
+                </div>
+                <div class="status">Personal Build Log 2026</div>
             </div>
 
-            <div class="card">
-                <span class="tag">Experiment #02</span>
-                <h3>Multi-Agent Orchestration</h3>
-                <p>A study on how specialized agents (Backend, Frontend, QA) communicate to build a full-stack feature from a single prompt.</p>
-            </div>
+            <section class="hero">
+                <div>
+                    <div class="eyebrow">Chat-first code experiments</div>
+                    <h1>Building products by texting <span class="accent">Codex</span> on Telegram.</h1>
+                    <p>This personal project documents a simple question: how far can a chat thread go before it feels like a real development cockpit? Prompts become features, summaries become commits, and Telegram turns into the control panel for shipping software.</p>
+                    <div class="actions">
+                        <a class="button primary" href="#tracks">See the experiments</a>
+                        <a class="button secondary" href="#story">Read the workflow</a>
+                    </div>
+                </div>
 
-            <div class="card">
-                <span class="tag">Experiment #03</span>
-                <h3>Semantic Documentation</h3>
-                <p>Generating real-time, context-aware documentation that evolves alongside the source code using RAG pipelines.</p>
-            </div>
+                <div class="terminal" aria-label="Sample Telegram-to-Codex conversation">
+                    <div class="terminal-head">
+                        <span class="dot sun"></span>
+                        <span class="dot coral"></span>
+                        <span class="dot sand"></span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="bubble user">Ship a landing page for a side project and keep the copy sharp.</div>
+                        <div class="bubble agent">Drafting structure, styling, and commit-ready changes. Sending the first proposal now.</div>
+                        <div class="bubble user">Now tighten the message and make the interface feel more editorial.</div>
+                        <div class="bubble agent">Updated. Next pass will compare prompt quality, time saved, and how much manual correction was required.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="metrics">
+                <div class="metrics-grid">
+                    <article class="panel">
+                        <div class="metric-value">01</div>
+                        <div class="metric-label">Telegram chat as the main interface for coding requests.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="metric-value">03</div>
+                        <div class="metric-label">Core signals tracked: clarity, turnaround time, and edit depth.</div>
+                    </article>
+                    <article class="panel">
+                        <div class="metric-value">24/7</div>
+                        <div class="metric-label">A portable workflow designed for quick iteration from anywhere.</div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="story" id="story">
+                <div class="story-grid">
+                    <div class="story-copy">
+                        <div class="eyebrow">Why this exists</div>
+                        <h2>A personal playground for remote-first software making.</h2>
+                        <p>The goal is not just to generate code. It is to pressure-test a new rhythm of development where planning, implementation, review, and delivery happen inside a conversational loop.</p>
+                        <p>Each session helps answer practical questions: which prompts create stable outputs, when human intervention matters most, and how much product momentum can come from a messaging app.</p>
+                    </div>
+                    <aside class="panel">
+                        <h3>Working thesis</h3>
+                        <p>When the interface is frictionless, experimentation becomes daily practice. Telegram lowers the barrier, while Codex carries the heavy drafting work.</p>
+                        <span class="signal">Prompt quality is the product skill</span>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="tracks" id="tracks">
+                <div class="eyebrow">Current tracks</div>
+                <div class="tracks-grid">
+                    <article class="panel">
+                        <h3>Prompt to Product</h3>
+                        <p>Short natural-language requests turned into interface drafts, page sections, and feature proposals.</p>
+                        <ul class="track-list">
+                            <li>Landing pages</li>
+                            <li>Micro tools</li>
+                            <li>Copy iterations</li>
+                        </ul>
+                    </article>
+                    <article class="panel">
+                        <h3>Human in the Loop</h3>
+                        <p>Measuring where review still adds the most value: tone, architecture, edge cases, and product judgment.</p>
+                        <ul class="track-list">
+                            <li>Prompt refinement</li>
+                            <li>Code cleanup</li>
+                            <li>Release decisions</li>
+                        </ul>
+                    </article>
+                    <article class="panel">
+                        <h3>Portable Workflow</h3>
+                        <p>Designing a practical system for creating, updating, and publishing software without opening a traditional IDE first.</p>
+                        <ul class="track-list">
+                            <li>Telegram as command layer</li>
+                            <li>Codex as implementation engine</li>
+                            <li>Git as delivery ledger</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <footer>
+                <p>Telegram Codex Lab is a personal experiment in conversational software shipping.</p>
+            </footer>
         </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 WebAppLab - Built for the future of Code.</p>
-    </footer>
-
+    </main>
 </body>
 </html>
