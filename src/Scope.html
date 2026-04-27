@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Scope | Telegram Codex Lab</title>
+    <style>
+        :root {
+            --paper: #f6f0e6;
+            --sand: #d7c5a4;
+            --amber: #f7a531;
+            --ember: #ef5b5b;
+            --pine: #183549;
+            --midnight: #09131f;
+            --panel: rgba(9, 19, 31, 0.74);
+            --line: rgba(246, 240, 230, 0.12);
+            --shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+            color: var(--paper);
+            line-height: 1.55;
+            background:
+                radial-gradient(circle at 12% 18%, rgba(247, 165, 49, 0.33), transparent 24%),
+                radial-gradient(circle at 88% 10%, rgba(239, 91, 91, 0.24), transparent 22%),
+                linear-gradient(145deg, #16344a 0%, #0d1d2d 45%, #09131f 100%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(246, 240, 230, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(246, 240, 230, 0.04) 1px, transparent 1px);
+            background-size: 34px 34px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.62), transparent 92%);
+        }
+
+        main {
+            width: min(1160px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 1.25rem 0 4rem;
+        }
+
+        .shell {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(9, 19, 31, 0.56), rgba(9, 19, 31, 0.84));
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+
+        .shell::after {
+            content: "";
+            position: absolute;
+            right: -120px;
+            top: 180px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(247, 165, 49, 0.16), transparent 72%);
+        }
+
+        .topbar,
+        .hero,
+        .scope,
+        .timeline,
+        footer {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--amber), var(--ember));
+            color: var(--midnight);
+            font-weight: 800;
+        }
+
+        .status,
+        .tag {
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.8rem;
+        }
+
+        .status {
+            padding: 0.45rem 0.9rem;
+            border: 1px solid rgba(247, 165, 49, 0.35);
+            color: var(--sand);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+            gap: 1.8rem;
+            align-items: center;
+            padding-top: 3.2rem;
+            padding-bottom: 2.2rem;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--sand);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 3rem;
+            height: 1px;
+            background: linear-gradient(90deg, var(--amber), transparent);
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin-top: 1rem;
+            font-size: clamp(3rem, 7vw, 5.7rem);
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+            max-width: 10ch;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            line-height: 1.05;
+        }
+
+        .accent {
+            color: var(--amber);
+        }
+
+        .hero p,
+        .panel p,
+        .step p,
+        footer p {
+            color: rgba(246, 240, 230, 0.78);
+        }
+
+        .hero p {
+            max-width: 58ch;
+            margin: 1.4rem 0 0;
+            font-size: 1.05rem;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.95rem 1.35rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .button.primary {
+            background: linear-gradient(135deg, var(--amber), var(--ember));
+            color: var(--midnight);
+        }
+
+        .button.secondary {
+            border: 1px solid var(--line);
+            background: rgba(246, 240, 230, 0.04);
+            color: var(--paper);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .snapshot {
+            padding: 1.3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(246, 240, 230, 0.10);
+            background: linear-gradient(180deg, rgba(246, 240, 230, 0.06), rgba(246, 240, 230, 0.03));
+        }
+
+        .snapshot ul,
+        .panel ul {
+            margin: 1rem 0 0;
+            padding-left: 1.15rem;
+        }
+
+        .snapshot li + li,
+        .panel li + li {
+            margin-top: 0.7rem;
+        }
+
+        .scope,
+        .timeline {
+            padding-bottom: 2rem;
+        }
+
+        .scope-grid,
+        .timeline-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .scope-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .panel,
+        .step {
+            padding: 1.4rem;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: var(--panel);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.4rem 0.7rem;
+            background: rgba(239, 91, 91, 0.14);
+            color: var(--sand);
+        }
+
+        .timeline-grid {
+            grid-template-columns: 0.95fr 1.05fr;
+            align-items: start;
+        }
+
+        .stack {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.3rem;
+            height: 2.3rem;
+            margin-bottom: 0.9rem;
+            border-radius: 50%;
+            background: rgba(247, 165, 49, 0.18);
+            color: var(--amber);
+            font-weight: 800;
+        }
+
+        footer {
+            padding-top: 0.4rem;
+            padding-bottom: 2.5rem;
+            text-align: center;
+            font-size: 0.92rem;
+        }
+
+        @media (max-width: 920px) {
+            .hero,
+            .scope-grid,
+            .timeline-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            main {
+                width: min(100% - 1rem, 1160px);
+                padding-bottom: 2rem;
+            }
+
+            .topbar,
+            .hero,
+            .scope,
+            .timeline,
+            footer {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="shell">
+            <div class="topbar">
+                <div class="brand">
+                    <span class="brand-mark">S</span>
+                    <span>Telegram Codex Lab</span>
+                </div>
+                <div class="status">Scope Proposal 2026</div>
+            </div>
+
+            <section class="hero">
+                <div>
+                    <div class="eyebrow">Automation roadmap</div>
+                    <h1>What we will <span class="accent">automate</span> with Telegram and Codex.</h1>
+                    <p>This page outlines a practical scope for turning Telegram into the command surface for product work. The goal is to move from manual coordination to a tighter loop where requests, execution, validation, and delivery happen with far less friction.</p>
+                    <div class="actions">
+                        <a class="button primary" href="#scope">View automation scope</a>
+                        <a class="button secondary" href="index.html">Back to home</a>
+                    </div>
+                </div>
+
+                <aside class="snapshot">
+                    <div class="tag">Working direction</div>
+                    <ul>
+                        <li>Telegram will capture requests, approvals, and quick follow-up prompts.</li>
+                        <li>Codex will translate intent into code, edits, reviews, and delivery steps.</li>
+                        <li>Tailscale will later extend the lab into a shared test network for new app validation.</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <section class="scope" id="scope">
+                <div class="eyebrow">Core scope</div>
+                <div class="scope-grid">
+                    <article class="panel">
+                        <h2>Build Tasks</h2>
+                        <p>Automate first-draft implementation work triggered from chat so that new pages, UI updates, content revisions, and small features can start from concise prompts instead of manual setup.</p>
+                        <ul>
+                            <li>Create pages and sections from structured requests.</li>
+                            <li>Rewrite copy, titles, and product messaging.</li>
+                            <li>Prepare commit-ready code changes for review.</li>
+                        </ul>
+                    </article>
+
+                    <article class="panel">
+                        <h2>Operational Tasks</h2>
+                        <p>Reduce the overhead around software shipping by automating the repetitive flow that usually lives across terminals, notes, and manual checklists.</p>
+                        <ul>
+                            <li>Summarize requested changes before execution.</li>
+                            <li>Run validations and report the result back to chat.</li>
+                            <li>Prepare commits, push branches, and document outcomes.</li>
+                        </ul>
+                    </article>
+
+                    <article class="panel">
+                        <h2>Testing Tasks</h2>
+                        <p>Structure the system so that test requests can evolve from local checks into network-aware scenarios once the environment becomes more distributed.</p>
+                        <ul>
+                            <li>Coordinate smoke tests for new app releases.</li>
+                            <li>Track what was tested, where, and with which result.</li>
+                            <li>Create a future path for machine-to-machine validation.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="timeline">
+                <div class="eyebrow">Next layer</div>
+                <div class="timeline-grid">
+                    <article class="panel">
+                        <h2>Tailscale introduction for the test lab.</h2>
+                        <p>In a later phase, Tailscale will connect machines into the same private testing network. That will let new apps be exercised across multiple devices and environments without exposing the lab to a broader public surface.</p>
+                        <p>This matters when the workflow expands beyond single-machine execution. Telegram remains the control channel, Codex remains the implementation layer, and Tailscale becomes the secure bridge between test nodes.</p>
+                    </article>
+
+                    <div class="stack">
+                        <article class="step">
+                            <div class="step-number">1</div>
+                            <h3>Phase one</h3>
+                            <p>Use Telegram plus Codex for scoped build, review, and delivery automation on the primary machine.</p>
+                        </article>
+                        <article class="step">
+                            <div class="step-number">2</div>
+                            <h3>Phase two</h3>
+                            <p>Add test orchestration patterns so the same chat flow can request checks, compare results, and log release confidence.</p>
+                        </article>
+                        <article class="step">
+                            <div class="step-number">3</div>
+                            <h3>Phase three</h3>
+                            <p>Bring Tailscale into the stack to test new apps on machines that share the same private network and can validate real distributed behavior.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <p>This scope frames Telegram as the interface, Codex as the execution engine, and Tailscale as the future network layer for broader app testing.</p>
+            </footer>
+        </div>
+    </main>
+</body>
+</html>
