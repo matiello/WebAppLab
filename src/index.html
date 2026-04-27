@@ -7,14 +7,17 @@
     <style>
         :root {
             --primary: #00ff88;
-            --bg: #0f172a;
+            --bg: #120f2b;
             --text: #f8fafc;
             --card-bg: #1e293b;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg);
+            background:
+                radial-gradient(circle at top left, #ff7a18 0%, rgba(255, 122, 24, 0) 32%),
+                radial-gradient(circle at top right, #2ec4b6 0%, rgba(46, 196, 182, 0) 28%),
+                linear-gradient(180deg, #20143f 0%, #120f2b 55%, #070b16 100%);
             color: var(--text);
             margin: 0;
             line-height: 1.6;
